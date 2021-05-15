@@ -33,6 +33,13 @@ namespace osu.Game.Overlays.Settings.Sections.Audio
                 },
                 new SettingsSlider<double>
                 {
+                    LabelText = "Master (while not playing)",
+                    Current = config.GetBindable<double>(OsuSetting.VolumeNotPlaying),
+                    KeyboardStep = 0.01f,
+                    DisplayAsPercentage = true
+                },
+                new SettingsSlider<double>
+                {
                     LabelText = "Effect",
                     Current = audio.VolumeSample,
                     KeyboardStep = 0.01f,

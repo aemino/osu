@@ -63,6 +63,7 @@ namespace osu.Game.Configuration
 
             // Audio
             SetDefault(OsuSetting.VolumeInactive, 0.25, 0, 1, 0.01);
+            SetDefault(OsuSetting.VolumeNotPlaying, 1.0, 0, 1, 0.01);
 
             SetDefault(OsuSetting.MenuVoice, true);
             SetDefault(OsuSetting.MenuMusic, true);
@@ -224,6 +225,7 @@ namespace osu.Game.Configuration
         ConfineMouseMode,
         AudioOffset,
         VolumeInactive,
+        VolumeNotPlaying,
         MenuMusic,
         MenuVoice,
         CursorRotation,

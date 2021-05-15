@@ -143,6 +143,8 @@ namespace osu.Game
 
         private Bindable<int> configSkin;
 
+        private Bindable<double> configNotPlayingVolume;
+
         private readonly string[] args;
 
         private readonly List<OverlayContainer> overlays = new List<OverlayContainer>();
@@ -244,8 +246,13 @@ namespace osu.Game
             configSkin.TriggerChange();
 
             IsActive.BindValueChanged(active => updateActiveState(active.NewValue), true);
+            LocalUserPlaying.BindValueChanged(active => updatePlayingState(active.NewValue), true);
+
+            configNotPlayingVolume = LocalConfig.GetBindable<double>(OsuSetting.VolumeNotPlaying);
+            configNotPlayingVolume.ValueChanged += volume => this.TransformBindableTo(notPlayingVolumeFade, volume.NewValue);
 
             Audio.AddAdjustment(AdjustableProperty.Volume, inactiveVolumeFade);
+            Audio.AddAdjustment(AdjustableProperty.Volume, notPlayingVolumeFade);
 
             SelectedMods.BindValueChanged(modsChanged);
             Beatmap.BindValueChanged(beatmapChanged, true);
@@ -949,6 +956,20 @@ namespace osu.Game
                 this.TransformBindableTo(inactiveVolumeFade, 1, 400, Easing.OutQuint);
             else
                 this.TransformBindableTo(inactiveVolumeFade, LocalConfig.Get<double>(OsuSetting.VolumeInactive), 4000, Easing.OutQuint);
+        }
+
+        #endregion
+
+        #region Non-gameplay audio dimming
+
+        private readonly BindableDouble notPlayingVolumeFade = new BindableDouble();
+
+        private void updatePlayingState(bool isActive)
+        {
+            if (isActive)
+                this.TransformBindableTo(notPlayingVolumeFade, 1, 400, Easing.OutQuint);
+            else
+                this.TransformBindableTo(notPlayingVolumeFade, LocalConfig.Get<double>(OsuSetting.VolumeNotPlaying), 4000, Easing.OutQuint);
         }
 
         #endregion
